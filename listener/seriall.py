@@ -11,10 +11,12 @@ class SerialListener(Listener):
     def listen(self):
         ports = serial.tools.list_ports.comports()
 
-        for port, desc, hwid in sorted(ports):
+        selected_port = None
+        for port, desc, hwid in ports:
             print("{}: {} [{}]".format(port, desc, hwid))
+            selected_port = port
 
-        ser = serial.Serial("/dev/ttyACM0", 9600, timeout=1)
+        ser = serial.Serial(selected_port, 9600, timeout=1)
 
         while True:
             if ser.isOpen():
