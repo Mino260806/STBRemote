@@ -52,9 +52,9 @@ class BasicController:
     def toggle_listening(self):
         self.listening = not self.listening
         if self.listening:
-            say("Control Off")
+            say("Controle On")
         else:
-            say("Control On")
+            say("Controle Off")
 
     def bind(self, listener: Listener):
         listener.bind(Action.VolumeUp, self.key_press(Key.media_volume_up))
