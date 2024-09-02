@@ -15,5 +15,5 @@ class ProcessController:
         if self.ran_process is None:
             return
 
-        os.killpg(os.getpgid(self.ran_process.pid), signal.SIGTERM)
+        os.kill(os.getpgid(self.ran_process.pid), signal.SIGTERM)
         self.ran_process = None
