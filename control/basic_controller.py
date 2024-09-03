@@ -57,13 +57,15 @@ class BasicController:
         if stream_url is None:
             say("No")
             return
-        if stream_url.startswith("PROXY"):
-            split = stream_url.split("]")
-            proxy = split[0][len("PROXY["):]
-            stream_url = "]".join(split[1:])
-        if stream_url.startswith("BROWSER[]"):
-            browser = True
-            stream_url = stream_url[len("BROWSER[]"):]
+        while stream_url.startswith(":"):
+            if stream_url.startswith(":PROXY"):
+                split = stream_url.split("]")
+                proxy = split[0][len(":PROXY["):]
+                stream_url = stream_url[stream_url.index("]")+1:]
+            elif stream_url.startswith(":BROWSER"):
+                browser = True
+                stream_url = stream_url[len(":BROWSER"):]
+
         if not stream_url.startswith("http"):
             stream_url = "https://" + stream_url
 
@@ -71,18 +73,22 @@ class BasicController:
         self.open_url(stream_url, proxy, browser)
 
     def open_url(self, stream_url, proxy=None, browser=False):
-        if proxy is not None:
-            self.process_controller.run(f"{chrome_exec} "
-                                        f"--proxy-server=\"{proxy}\" "
-                                        f"--user-data-dir=\"{self.chrome_data_dir}\" "
-                                        f"--new-window "
-                                        f"\"chrome-extension://opmeopcambhfimffbomjgemehjkbbmji/pages/player.html#{stream_url}\"")
-        elif browser:
-            self.process_controller.run(f"{chrome_exec} "
-                                        f"--user-data-dir=\"{self.chrome_data_dir}\" "
-                                        f"--no-proxy-server "
-                                        f"--new-window "
-                                        f"\"{stream_url}\"")
+        if proxy or browser:
+            command = f"{chrome_exec} " \
+                      f"--user-data-dir=\"{self.chrome_data_dir}\" " \
+                      f"--new-window "
+            if proxy:
+                command += f"--proxy-server=\"{proxy}\" "
+            else:
+                command += f"--no-proxy-server "
+
+            if browser:
+                command += f"\"{stream_url}\""
+            else:
+                command += f"\"chrome-extension://opmeopcambhfimffbomjgemehjkbbmji/pages/player.html#{stream_url}\""
+            print(command)
+            self.process_controller.run(command)
+
         else:
             self.process_controller.run(f"vlc {stream_url}")
 
