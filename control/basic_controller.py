@@ -80,6 +80,7 @@ class BasicController:
         elif browser:
             self.process_controller.run(f"{chrome_exec} "
                                         f"--user-data-dir=\"{self.chrome_data_dir}\" "
+                                        f"--no-proxy-server "
                                         f"--new-window "
                                         f"\"{stream_url}\"")
         else:
