@@ -21,6 +21,13 @@ class Action(enum.Enum):
         entry.repeatable = repeatable
         return entry
 
+    @classmethod
+    def get(cls, name):
+        try:
+            return cls[name]
+        except KeyError:
+            return None
+
 
 if __name__ == "__main__":
     print(Action.VolumeDown)

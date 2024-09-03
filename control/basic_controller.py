@@ -10,6 +10,10 @@ from listener.base import Listener
 
 keyboard = Controller()
 
+if platform.system() == "Linux":
+    chrome_exec = "google-chrome"
+else:
+    chrome_exec = "chrome"
 
 def say(text):
     system = platform.system()
@@ -20,9 +24,10 @@ def say(text):
 
 
 class BasicController:
-    def __init__(self):
+    def __init__(self, chrome_data_dir=""):
         self.process_controller = ProcessController()
         self.listening = True
+        self.chrome_data_dir = chrome_data_dir
 
     def key_press(self, key):
         def execute():
@@ -35,19 +40,46 @@ class BasicController:
     def get_stream_url(self):
         url = "http://192.168.1.100:2608"
 
-        response = requests.get(url)
-        if response.status_code == 200:
-            return response.text.strip()
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                return response.text.strip()
+        except requests.exceptions.ConnectionError:
+            return None
 
     def play_stream(self):
         if not self.listening:
             return
 
         stream_url = self.get_stream_url()
+        proxy = None
+        if stream_url is None:
+            say("No")
+            return
+        if stream_url.startswith("PROXY"):
+            split = stream_url.split("]")
+            proxy = split[0][len("PROXY["):]
+            stream_url = "]".join(split[1:])
         if not stream_url.startswith("http"):
             stream_url = "https://" + stream_url
 
-        self.process_controller.run(["vlc", stream_url])
+        print(f"proxy is {proxy}")
+        self.open_url(stream_url, proxy)
+
+    def open_url(self, stream_url, proxy=None):
+        if proxy is not None:
+            self.process_controller.run(f"{chrome_exec} "
+                                        f"--proxy-server=\"{proxy}\" "
+                                        f"--user-data-dir=\"{self.chrome_data_dir}\" "
+                                        f"--new-window "
+                                        f"\"chrome-extension://opmeopcambhfimffbomjgemehjkbbmji/pages/player.html#{stream_url}\"")
+        elif "youtube.com" in stream_url or "youtu.be" in stream_url:
+            self.process_controller.run(f"{chrome_exec} "
+                                        f"--user-data-dir=\"{self.chrome_data_dir}\" "
+                                        f"--new-window "
+                                        f"\"{stream_url}\"")
+        else:
+            self.process_controller.run(f"vlc {stream_url}")
 
     def toggle_listening(self):
         self.listening = not self.listening
