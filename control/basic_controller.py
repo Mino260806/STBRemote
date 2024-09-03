@@ -112,7 +112,8 @@ class BasicController:
         listener.bind(Action.Mute, self.key_press(Key.media_volume_mute))
         listener.bind(Action.Display, self.key_press("f"))
         listener.bind(Action.Mode, self.key_press(Key.tab))
-        listener.bind(Action.Mode, self.key_press(Key.tab, Key.shift))
+        listener.bind(Action.Wifi, self.key_press(Key.tab, Key.shift))
+        listener.bind(Action.Ok, self.key_press(Key.enter))
         listener.bind(Action.TVRadio, self.toggle_listening)
 
         listener.bind(Action.Next, self.play_stream)
