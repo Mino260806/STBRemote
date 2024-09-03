@@ -14,5 +14,7 @@ STARSAT_CODES = {
     0x90fd21de: Action.Mode,
     0x90fdbb44: Action.Wifi,
     0x90fd5ba4: Action.Ok,
+    0x90fd7b84: Action.Up,
+    0x90fd6b94: Action.Down,
 }
 
