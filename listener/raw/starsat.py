@@ -12,5 +12,6 @@ STARSAT_CODES = {
     0x90fd31ce: Action.Display,
     0x90fd916e: Action.TVRadio,
     0x90fd21de: Action.Mode,
+    0x90fdbb44: Action.Wifi,
 }
 

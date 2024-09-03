@@ -29,12 +29,16 @@ class BasicController:
         self.listening = True
         self.chrome_data_dir = chrome_data_dir
 
-    def key_press(self, key):
+    def key_press(self, key, modifier=None):
         def execute():
             if not self.listening:
                 return
+            if modifier is not None:
+                keyboard.press(modifier)
             keyboard.press(key)
             keyboard.release(key)
+            if modifier is not None:
+                keyboard.release(modifier)
 
         return execute
     def get_stream_url(self):
@@ -108,6 +112,7 @@ class BasicController:
         listener.bind(Action.Mute, self.key_press(Key.media_volume_mute))
         listener.bind(Action.Display, self.key_press("f"))
         listener.bind(Action.Mode, self.key_press(Key.tab))
+        listener.bind(Action.Mode, self.key_press(Key.tab, Key.shift))
         listener.bind(Action.TVRadio, self.toggle_listening)
 
         listener.bind(Action.Next, self.play_stream)
