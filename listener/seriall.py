@@ -25,7 +25,7 @@ class SerialListener(Listener):
                     ir_code = int(input_data, 16)
                     self.handle_ir_code(ir_code)
                 except ValueError:
-                    pass
+                    self.handle_ir_code(None)
 
     def handle_ir_code(self, ir_code):
         pass
@@ -33,6 +33,8 @@ class SerialListener(Listener):
 
 class StarsatSerialListener(SerialListener):
     def handle_ir_code(self, ir_code):
+        if ir_code is None:
+            self.dispatch_action(None)
         action = STARSAT_CODES.get(ir_code)
         print(hex(ir_code), action)
         if isinstance(action, Action):
