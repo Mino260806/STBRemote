@@ -53,6 +53,7 @@ class BasicController:
 
         stream_url = self.get_stream_url()
         proxy = None
+        browser = False
         if stream_url is None:
             say("No")
             return
@@ -60,20 +61,23 @@ class BasicController:
             split = stream_url.split("]")
             proxy = split[0][len("PROXY["):]
             stream_url = "]".join(split[1:])
+        if stream_url.startswith("BROWSER[]"):
+            browser = True
+            stream_url = stream_url[len("BROWSER[]"):]
         if not stream_url.startswith("http"):
             stream_url = "https://" + stream_url
 
         print(f"proxy is {proxy}")
-        self.open_url(stream_url, proxy)
+        self.open_url(stream_url, proxy, browser)
 
-    def open_url(self, stream_url, proxy=None):
+    def open_url(self, stream_url, proxy=None, browser=False):
         if proxy is not None:
             self.process_controller.run(f"{chrome_exec} "
                                         f"--proxy-server=\"{proxy}\" "
                                         f"--user-data-dir=\"{self.chrome_data_dir}\" "
                                         f"--new-window "
                                         f"\"chrome-extension://opmeopcambhfimffbomjgemehjkbbmji/pages/player.html#{stream_url}\"")
-        elif "youtube.com" in stream_url or "youtu.be" in stream_url:
+        elif browser:
             self.process_controller.run(f"{chrome_exec} "
                                         f"--user-data-dir=\"{self.chrome_data_dir}\" "
                                         f"--new-window "
