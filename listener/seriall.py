@@ -35,6 +35,7 @@ class StarsatSerialListener(SerialListener):
     def handle_ir_code(self, ir_code):
         if ir_code is None:
             self.dispatch_action(None)
+            return
         action = STARSAT_CODES.get(ir_code)
         print(hex(ir_code), action)
         if isinstance(action, Action):
