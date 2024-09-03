@@ -37,3 +37,5 @@ class StarsatSerialListener(SerialListener):
         print(hex(ir_code), action)
         if isinstance(action, Action):
             self.dispatch_action(action)
+        else:
+            self.dispatch_action(None)
