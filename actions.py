@@ -19,6 +19,8 @@ class Action(enum.Enum):
     Ok = 14, False
     Up = 15, False
     Down = 16, False
+    PageUp = 17, False
+    PageDown = 18, False
 
     def __new__(cls, id, repeatable):
         entry = object.__new__(cls)
