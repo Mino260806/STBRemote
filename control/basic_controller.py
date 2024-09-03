@@ -116,6 +116,7 @@ class BasicController:
         listener.bind(Action.Ok, self.key_press(Key.enter))
         listener.bind(Action.Up, self.key_press(Key.up))
         listener.bind(Action.Down, self.key_press(Key.down))
+        listener.bind(Action.Exit, self.key_press(Key.esc))
         listener.bind(Action.TVRadio, self.toggle_listening)
 
         listener.bind(Action.Next, self.play_stream)

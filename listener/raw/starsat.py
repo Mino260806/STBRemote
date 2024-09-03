@@ -18,5 +18,6 @@ STARSAT_CODES = {
     0x90fd6b94: Action.Down,
     0x90fd0bf4: Action.PageUp,
     0x90fd33cc: Action.PageDown,
+    0x90fdeb14: Action.Exit,
 }
 

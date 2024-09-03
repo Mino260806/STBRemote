@@ -21,6 +21,7 @@ class Action(enum.Enum):
     Down = 16, False
     PageUp = 17, False
     PageDown = 18, False
+    Exit = 19, False
 
     def __new__(cls, id, repeatable):
         entry = object.__new__(cls)
