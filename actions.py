@@ -14,6 +14,7 @@ class Action(enum.Enum):
     Display = 9, False
     Power = 10, False
     TVRadio = 11, False
+    Mode = 12, False
 
     def __new__(cls, id, repeatable):
         entry = object.__new__(cls)

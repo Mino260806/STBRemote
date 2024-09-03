@@ -11,5 +11,6 @@ STARSAT_CODES = {
     0x90fdd12e: Action.Mute,
     0x90fd31ce: Action.Display,
     0x90fd916e: Action.TVRadio,
+    0x90fd21de: Action.Mode,
 }
 
